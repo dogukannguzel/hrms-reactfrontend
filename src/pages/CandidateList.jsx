@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Table, Header } from "semantic-ui-react";
 import CandidateService from "../services/candidateService";
 const CandidateList = () => {
@@ -31,7 +32,7 @@ const CandidateList = () => {
               <Table.Cell>{candidate.birthDate}</Table.Cell>
               <Table.Cell>{candidate.email}</Table.Cell>
               <Table.Cell>
-                <a>Cv detayı</a>
+               <Link className="btn btn-danger" to={`/resume/${candidate.id}`} >Cv detayı</Link>
               </Table.Cell>
             </Table.Row>
           ))}

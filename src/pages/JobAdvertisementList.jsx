@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { Button, Table, Header } from "semantic-ui-react";
 import JobAdvertisementService from "../services/jobAdvertisementService";
 const JobAdvertisementList = () => {
@@ -13,7 +14,7 @@ const JobAdvertisementList = () => {
 
   return (
     <div>
-      <Header as="h3" icon="clipboard list" content="Job Advertisements" />
+      <Header as="h3" icon="clipboard list"  content="Job Advertisements" />
       <Table celled fixed singleLine>
         <Table.Header>
           <Table.Row>
@@ -29,7 +30,7 @@ const JobAdvertisementList = () => {
         <Table.Body>
           {jobAdvertisements.map((j) => (
             <Table.Row>
-              <Table.Cell>{j.companyName}</Table.Cell>
+              <Table.Cell as={NavLink} to={`/jobAdvertisement/${j.id}`} >{j.companyName}</Table.Cell>
               <Table.Cell>{j.jobPosition}</Table.Cell>
               <Table.Cell>{j.openPosition}</Table.Cell>
               <Table.Cell>{j.createdDate}</Table.Cell>
