@@ -12,6 +12,10 @@ export default class JobAdvertisementService{
     }
 
 
+    getJobAdvertisementTableDto(){
+      return axios.get("http://127.0.0.1:8081/api/jobadvertisement/getByJobAdversitementTableDto")
+    }
+
     postJobAdvertisement(obj){
       return axios.post('http://127.0.0.1:8081/api/jobadvertisement/add',obj, {
         headers: {
@@ -20,5 +24,14 @@ export default class JobAdvertisementService{
         }
     })
     }
+
+  getJobAdvertisementsEnableFalse(){
+  return axios.get("http://127.0.0.1:8081/api/jobadvertisement/getByJobAdversitementEnableFalse");
+  }
+
+  putJobAdvertisementEnable(id){
+      return axios.put(`http://127.0.0.1:8081/api/jobadvertisement/setEnable?id=${id}`)
+  }
+
 
 }

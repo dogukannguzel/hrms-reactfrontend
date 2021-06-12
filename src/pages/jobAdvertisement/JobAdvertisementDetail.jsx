@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
-import JobAdvertisementService from '../services/jobAdvertisementService';
+import JobAdvertisementService from '../../services/jobAdvertisementService';
 import {Button} from 'reactstrap';
 export default function JobAdvertisementDetail() {
 

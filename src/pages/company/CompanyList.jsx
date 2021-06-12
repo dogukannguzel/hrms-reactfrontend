@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Header } from "semantic-ui-react";
-import CompanyService from "../services/companyService";
+import CompanyService from "../../services/companyService";
 const CompanyList = () => {
   const [companys, setCompanys] = useState([]);
 

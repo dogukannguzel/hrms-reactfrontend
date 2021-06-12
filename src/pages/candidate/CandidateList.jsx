@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Table, Header } from "semantic-ui-react";
-import CandidateService from "../services/candidateService";
+import CandidateService from "../../services/candidateService";
 const CandidateList = () => {
   const [candidates, setCandidates] = useState([]);
 

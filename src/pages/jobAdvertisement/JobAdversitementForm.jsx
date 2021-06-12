@@ -7,8 +7,10 @@ import CityService from '../../services/cityService'
 import PositionsService from '../../services/positionService'
 import WorkTypeService from '../../services/workTypeService'
 import WorkPlaceService from '../../services/workPlaceService'
-import SelectInput from './SelectInput'
-import NumberInput from "./NumberInput"
+import SelectInput from '../tools/SelectInput'
+import NumberInput from "../tools/NumberInput"
+import alertifyjs from "alertifyjs"
+import alertify from 'alertifyjs'
 export default function JobAdversitementForm() {
 
     const [cities, setCities] = useState([])
@@ -20,7 +22,8 @@ export default function JobAdversitementForm() {
     useEffect(() => {
         let cityService = new CityService()
         cityService.getCitys().then(result => setCities(result.data.data))
-        let positionService = new PositionsService().getJobPositions().then(result => setJobPositions(result.data.data))
+        let positionService = new PositionsService()
+        positionService.getJobPositions().then(result => setJobPositions(result.data.data))
         let workTypeSerivce = new WorkTypeService()
         workTypeSerivce.getWorkType().then(result => setWorkTypes(result.data.data))
         let workPlaceService = new WorkPlaceService()
@@ -65,6 +68,7 @@ export default function JobAdversitementForm() {
         onSubmit: (values, { setSubmitting, resetForm }) => {
             let jobAdvertisementService = new JobAdvertisementService()
             jobAdvertisementService.postJobAdvertisement(values)
+            alertify.success("İş ilanı eklendi")
             setTimeout(() => {
                 setSubmitting(false);
                 resetForm();
@@ -116,13 +120,19 @@ export default function JobAdversitementForm() {
                 )}
 
                 <NumberInput touched={touched.minSalary} error={errors.minSalary} value={values.minSalary} handleChange={handleChange} name="minSalary" label="Min Salary" />
+                
                 <NumberInput touched={touched.maxSalary} error={errors.maxSalary} value={values.maxSalary} handleChange={handleChange} name="maxSalary" label="Max Salary" />
+                
                 <NumberInput touched={touched.jobPositionId} error={errors.openPosition} value={values.openPosition} handleChange={handleChange} name="openPosition" label="Open Position Count" />
+                
                 <Form.Field control={Input} label="Application Deadline" type="date" onChange={handleChange} name="applicationDeadline" />
+               
                 {errors.applicationDeadline && touched.applicationDeadline && (
                     <Message color='red'>{errors.applicationDeadline}</Message>
                 )}
+                
                 <Button type="submit" >İlan ekle </Button>
+                
             </Form>
         </div>
     )

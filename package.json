@@ -2,12 +2,12 @@
   "name": "hrms-react",
   "version": "0.1.0",
   "private": true,
-  "port":"http://127.0.0.1:8081/",
+  "port": "http://127.0.0.1:8081/",
   "dependencies": {
-    
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "alertifyjs": "^1.13.1",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.1",
     "dom": "0.0.3",

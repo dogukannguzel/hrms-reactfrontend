@@ -8,7 +8,7 @@ export default function PositionSelected({ value, handleChange, defaultValue, op
         <option name={name} selected value="">{defaultValue}</option>
         {
           options.map(prop => (
-            <option value={prop.value}>{prop.text}</option>
+            <option key={prop.value} value={prop.value}>{prop.text}</option>
           ))
         }
 

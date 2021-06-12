@@ -1,15 +1,14 @@
 import React from "react";
 import Positions from "./Positions";
-
 import { Grid } from "semantic-ui-react";
-import JobAdvertisementList from "../pages/JobAdvertisementList";
-import JobAdvertisementDetail from "../pages/JobAdvertisementDetail"
-import CandidateList from "../pages/CandidateList";
-import CompanyList from "../pages/CompanyList";
 import { Route } from "react-router";
-import ResumeDetail from "../pages/ResumeDetail";
-import JobAdversitementForm from "../pages/jobAdvertisementForm/JobAdversitementForm";
-
+import JobAdversitementForm from "../pages/jobAdvertisement/JobAdversitementForm";
+import CandidateList from "../pages/candidate/CandidateList"
+import ResumeDetail from "../pages/candidate/ResumeDetail"
+import CompanyList from "../pages/company/CompanyList"
+import JobAdvertisementList from "../pages/jobAdvertisement/JobAdvertisementList"
+import JobAdvertisementDetail from "../pages/jobAdvertisement/JobAdvertisementDetail"
+import SetJobAdvertisement from "../pages/Employee/SetJobAdvertisement";
 export default function Dashboard() {
   return (
     <div>
@@ -26,6 +25,7 @@ export default function Dashboard() {
             <Route path="/jobAdvertisement/:id" exact component={JobAdvertisementDetail}/>
             <Route path="/resume/:id" component={ResumeDetail}/>
             <Route path="/jobadvertisementpost" component={JobAdversitementForm}   />
+            <Route path="/setJobAdvertisement" component={SetJobAdvertisement}   />
           </Grid.Column>
         </Grid.Row>
       </Grid>
