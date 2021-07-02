@@ -1,20 +1,33 @@
 import React from "react";
-
+import { useState } from "react";
+import { NavLink, useHistory } from "react-router-dom";
+import SıgnedIn from "./SıgnedIn";
 import { Button, Container, Dropdown, Menu, Icon } from "semantic-ui-react";
+import SıgnedOut from "./SıgnedOut";
 const Navi = () => {
+
+
+  const history=useHistory()
+
+  const [isAuthhentication, setisAuthhentication] = useState(true)
+
+
+
+
+  function handleSignOut() {
+
+    setisAuthhentication(false)
+    history.push("/")
+  }
+
   return (
     <div>
       <Menu fixed="top" inverted>
         <Container>
-          <Menu.Item name="Ana Sayfa" />
-          <Menu.Item name="İş ilanları" />
-          <Menu.Item name="İş arayanlar" />
-          <Menu.Item name="İş verenler" />
+          <Menu.Item as={NavLink} to="/" exact  name="Ana Sayfa" />
+    
           <Menu.Menu position="right">
-            <Menu.Item>
-              <Button color="blue" attached="left">Kayıt ol</Button>
-              <Button color="blue" attached="right">Giriş yap</Button>
-            </Menu.Item>
+      {isAuthhentication?<SıgnedIn sıgnedOut={handleSignOut}  />:<SıgnedOut/>}
           </Menu.Menu>
         </Container>
       </Menu>

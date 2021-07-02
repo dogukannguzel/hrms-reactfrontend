@@ -1,0 +1,35 @@
+.job-advertisement-form{
+    background-color: aliceblue;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    padding: 30px 50px;
+    margin-bottom: 20px;
+    max-width: 500px;
+  margin-left: 20em;
+}
+
+.filter-button{
+  position: absolute;
+left:50px;
+top: 130px;
+}
+
+
+.filterform{
+  position: absolute;
+  right: 0px;
+  width: 10px;
+  bottom: 10px;
+  top: 50px;
+}
+
+
+
+
+
+.favorite-button{
+  position: absolute;
+  right:7em;
+}

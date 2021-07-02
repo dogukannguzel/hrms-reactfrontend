@@ -1,27 +1,29 @@
 import alertify from 'alertifyjs';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Button, Table } from 'reactstrap';
 import JobAdvertisementService from '../../services/jobAdvertisementService';
+
+import { getAllEmployeeConfirmJobAdvertisementFalseApi, setJobAdvertisementConfirmTrueApi } from '../../store/actions/employeeAction';
 const SetJobAdvertisement = () => {
 
 
-    const [jobAdvertisements, setjobAdvertisements] = useState([]);
+    const confirmedFalseJobAdvertisement = useSelector(state =>state.employee.confirmedFalseJobAdvertisement)
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        let jobAdvertisementService = new JobAdvertisementService()
-        jobAdvertisementService.getJobAdvertisementsEnableFalse().then(result => setjobAdvertisements(result.data.data))
-    }, []
-    )
+    useEffect(()=>{
+        dispatch(getAllEmployeeConfirmJobAdvertisementFalseApi())
+    },[])
 
 
 
     const setJobAdvertisementEnable = (id) => {
-        let jobAdvertisementService = new JobAdvertisementService()
-        jobAdvertisementService.putJobAdvertisementEnable(id)
-        alertify.success("İş ilanı onaylandı")
+        dispatch(setJobAdvertisementConfirmTrueApi(id))
+        toast.success("İş ilanı onaylandı")
     }
 
-
+console.log(confirmedFalseJobAdvertisement)
 
 
     return (
@@ -33,7 +35,6 @@ const SetJobAdvertisement = () => {
                         <th>Company Name</th>
                         <th>Job Position</th>
                         <th>Open Position</th>
-                        <th>Created Date</th>
                         <th>Application Deadline</th>
                         <th>Onayla</th>
                         <th>Sil</th>
@@ -42,18 +43,17 @@ const SetJobAdvertisement = () => {
                 <tbody>
 
                     {
-                        jobAdvertisements.map(jobadvertisement => (
+                        confirmedFalseJobAdvertisement?.map(j => (
                             <tr>
-                                <td>{jobadvertisement.id}</td>
-                                <td>{jobadvertisement.companyName}</td>
-                                <td>{jobadvertisement.openPosition}</td>
-                                <td>{jobadvertisement.jobPosition}</td>
-                                <td>{jobadvertisement.createdDate}</td>
-                                <td>{jobadvertisement.applicationDeadline}</td>
-                                <td><Button onClick={() => setJobAdvertisementEnable(jobadvertisement.id)} className="btn btn-success" type="submit"  >Onayla</Button></td>
+                                <td>{j.jobAdvertisement.id}</td>
+                                <td>{j.jobAdvertisement.company.companyName}</td>
+                                <td>{j.jobAdvertisement.jobPosition.position}</td>
+                                <td>{j.jobAdvertisement.openPosition}</td>
+                                <td>{j.jobAdvertisement.applicationDeadline.dayOfWeek}</td>
+                                <td><Button onClick={() => setJobAdvertisementEnable(j.id)} className="btn btn-success" type="submit"  >Onayla</Button></td>
                                 <td><Button className="btn btn-danger" type="submit"  >Sil</Button></td>
                             </tr>
-                        ))
+                        )) 
                     }
 
 

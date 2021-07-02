@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { Formik, useFormik } from "formik"
+import { Formik, Form } from "formik"
 import * as Yup from "yup"
-import { Button, Checkbox, Form, Input, Select, Message, TextArea } from 'semantic-ui-react'
+import { TextArea, Button } from 'semantic-ui-react'
 import JobAdvertisementService from '../../services/jobAdvertisementService'
-import CityService from '../../services/cityService'
-import PositionsService from '../../services/positionService'
+
 import WorkTypeService from '../../services/workTypeService'
 import WorkPlaceService from '../../services/workPlaceService'
-import SelectInput from '../tools/SelectInput'
-import NumberInput from "../tools/NumberInput"
-import alertifyjs from "alertifyjs"
-import alertify from 'alertifyjs'
+
+import { toast } from 'react-toastify'
+import DGTextInput from './../toolBox/customFormControls/DGTextInput';
+import DGSelectInput from './../toolBox/customFormControls/DGSelectInput';
+import { useDispatch, useSelector } from 'react-redux'
+import { getJobPositionApi } from '../../store/actions/jobPositionAction'
+import { getCityApi } from '../../store/actions/cittyAction'
+
 export default function JobAdversitementForm() {
 
-    const [cities, setCities] = useState([])
-    const [jobPositions, setJobPositions] = useState([]);
+    const dispatch = useDispatch()
+
+    const cities = useSelector(state => state.cities)
+   const jobPositions = useSelector(state => state.jobPositions)
     const [workPlaces, setWorkPlaces] = useState([]);
     const [workTypes, setWorkTypes] = useState([]);
 
 
     useEffect(() => {
-        let cityService = new CityService()
-        cityService.getCitys().then(result => setCities(result.data.data))
-        let positionService = new PositionsService()
-        positionService.getJobPositions().then(result => setJobPositions(result.data.data))
+        dispatch(getCityApi())
+        
+        dispatch(getJobPositionApi())
+
         let workTypeSerivce = new WorkTypeService()
         workTypeSerivce.getWorkType().then(result => setWorkTypes(result.data.data))
         let workPlaceService = new WorkPlaceService()
@@ -32,108 +37,98 @@ export default function JobAdversitementForm() {
     }, [])
 
 
+    const handleSave = (value) => {
+        let jobAdvertisementService = new JobAdvertisementService()
+        jobAdvertisementService.postJobAdvertisement(value)
+        toast.success("İş ilanı eklendi yayına alınması için yöneticilerin onayı gerekir...")
+    }
 
 
-
-
-
-
-    const { handleSubmit, handleChange, handleBlur, values, errors, touched } = useFormik({
-        initialValues: {
-            jobPositionId: '',
-            cityId: '',
-            jobDescription: "",
-            minSalary: '',
-            maxSalary: '',
-            openPosition: '',
-            workPlaceId: '',
-            workTypeId: '',
-            applicationDeadline: '',
-            companyId: 16
-
-
-
-        },
-        validationSchema: Yup.object({
-            jobPositionId: Yup.string().required("Pozisyon alanı boş olamaz "),
-            cityId: Yup.number().required("City alanı boş geçilemez"),
-            jobDescription: Yup.string().required("İş ilanı açıklaması boş geçilemez"),
-            minSalary: Yup.string(),
-            maxSalary: Yup.string(),
-            openPosition: Yup.string().required("Pozisyon adedi alanı boş geçilemez"),
-            workPlaceId: Yup.string().required("Work place alanı boş geçilemez"),
-            workTypeId: Yup.string().required("Work type alanı boş geçilemez"),
-            applicationDeadline: Yup.date().required("İş ilanı bitiş suresi boş geçilemez")
-        }),
-        onSubmit: (values, { setSubmitting, resetForm }) => {
-            let jobAdvertisementService = new JobAdvertisementService()
-            jobAdvertisementService.postJobAdvertisement(values)
-            alertify.success("İş ilanı eklendi")
-            setTimeout(() => {
-                setSubmitting(false);
-                resetForm();
-            }, 2000);
-        }
+    const schema = Yup.object({
+        jobPositionId: Yup.string().required("Pozisyon alanı boş olamaz "),
+        cityId: Yup.number().required("City alanı boş geçilemez"),
+        jobDescription: Yup.string().required("İş ilanı açıklaması boş geçilemez"),
+        minSalary: Yup.string(),
+        maxSalary: Yup.string(),
+        openPosition: Yup.string().required("Pozisyon adedi alanı boş geçilemez"),
+        workPlaceId: Yup.string().required("Work place alanı boş geçilemez"),
+        workTypeId: Yup.string().required("Work type alanı boş geçilemez"),
+        applicationDeadline: Yup.date().required("İş ilanı bitiş suresi boş geçilemez")
     })
 
 
+    const initialValues = {
+        jobPositionId: '',
+        cityId: '',
+        jobDescription: "",
+        minSalary: '',
+        maxSalary: '',
+        openPosition: '',
+        workPlaceId: '',
+        workTypeId: '',
+        applicationDeadline: '',
+        companyId: 22
+    }
 
 
 
+    const jobPositionOptions = jobPositions.map((position, id) => ({
+        key: id,
+        value: position.id,
+        text: position.position
+
+    }))
+
+
+    const cityOptions = cities.map((city, id) => ({
+        key: id,
+        value: city.id,
+        text: city.name
+
+    }))
+    const workPlaceOptions = workPlaces.map((workPlace, id) => ({
+        key: id,
+        value: workPlace.id,
+        text: workPlace.type
+
+    }))
+
+    const workTypeOptions = workTypes.map((workType, id) => ({
+        key: id,
+        value: workType.id,
+        text: workType.type
+
+    }))
 
     return (
         <div>
-            <Form onSubmit={handleSubmit}  >
-                <SelectInput name="workTypeId" touched={touched.workTypeId} label="Work Type" value={values.workTypeId} handleChange={handleChange} defaultValue="Work Type" error={errors.workTypeId} options={workTypes.map(workType => ({
-                    value: workType.id,
-                    text: workType.type
-                }))} />
+            <div className="job-advertisement-form">
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={schema}
+                    onSubmit={(values) => {
+                       handleSave(values)
+                    }}
+                >
 
-                <SelectInput name="workPlaceId" touched={touched.workPlaceId} label="Work Place" value={values.workPlaceId} defaultValue="Work Place" handleChange={handleChange} error={errors.workPlaceId} options={workPlaces.map(workPlace => ({
-                    value: workPlace.id,
-                    text: workPlace.type
-                }))} />
-
-                <SelectInput value={values.jobPositionId} touched={touched.jobPositionId} name="jobPositionId" label="Job Position" defaultValue="Job Position" handleChange={handleChange} error={errors.jobPositionId} options={jobPositions.map(jobPosition => ({
-                    value: jobPosition.id,
-                    text: jobPosition.position
-                }))} />
-
-
-                <SelectInput value={values.cityId} touched={touched.cityId} name="cityId" label="City" handleChange={handleChange} defaultValue="City" error={errors.cityId} options={cities.map(city => ({
-                    value: city.id,
-                    text: city.name
-                }))} />
+                    <Form className="ui form">
+                        <DGSelectInput label="Job Position" search name="jobPositionId" options={jobPositionOptions} />
+                        <DGSelectInput label = "City" search  name="cityId" options={cityOptions} />
+                        <DGSelectInput search label="Work Place" name="workPlaceId" options={workPlaceOptions} />
+                        <DGSelectInput search label="Work Type" name="workTypeId" options={workTypeOptions} />
+                        <DGTextInput label="Min salary" type="number" name="minSalary" placeHolder="Min salary" />
+                        <DGTextInput label="Max salary"  type="number" name="maxSalary" placeHolder="Max Salary" />
+                        <DGTextInput label="Open Position"  type="number" name="openPosition" placeHolder="Open Position Count" />
+                        <DGTextInput label="Application Deadline"  type="date" name="applicationDeadline" placeHolder="Application Deadline" />
+                        <DGTextInput label="Job Description"  name="jobDescription" control={TextArea} placeHolder="Job Advertisement Description" />
+                        <Button type="submit" color="green">Add</Button>
+                    </Form>
 
 
-                <Form.Field
-                    id='form-textarea-control-opinion'
-                    control={TextArea}
-                    name="jobDescription"
-                    onChange={handleChange}
-                    label='Job Description'
-                    value={values.jobDescription}
-                    placeholder='Job Description'
-                />
-                {errors.jobDescription && touched.jobDescription && (
-                    <Message color='red'>{errors.jobDescription}</Message>
-                )}
 
-                <NumberInput touched={touched.minSalary} error={errors.minSalary} value={values.minSalary} handleChange={handleChange} name="minSalary" label="Min Salary" />
-                
-                <NumberInput touched={touched.maxSalary} error={errors.maxSalary} value={values.maxSalary} handleChange={handleChange} name="maxSalary" label="Max Salary" />
-                
-                <NumberInput touched={touched.jobPositionId} error={errors.openPosition} value={values.openPosition} handleChange={handleChange} name="openPosition" label="Open Position Count" />
-                
-                <Form.Field control={Input} label="Application Deadline" type="date" onChange={handleChange} name="applicationDeadline" />
-               
-                {errors.applicationDeadline && touched.applicationDeadline && (
-                    <Message color='red'>{errors.applicationDeadline}</Message>
-                )}
-                
-                <Button type="submit" >İlan ekle </Button>
-                
-            </Form>
+                </Formik>
+            </div>
         </div>
+
     )
 }

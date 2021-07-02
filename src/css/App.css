@@ -1,0 +1,55 @@
+.App {
+  text-align: center;
+}
+.ui.main.container{
+  margin-top: 5em;
+  margin-right:50px
+}
+.avatar {
+  
+  width: 100px;
+ height: 95px;
+  position: absolute;
+  
+}
+
+.jobpost{
+ max-width: 50%;
+ margin-left: 20%;
+
+}
+
+
+
+
+
+
+.home-card1{
+  position: absolute
+  ;
+  left: 0;
+  margin: auto;
+ 
+}
+
+.candidate-card{
+  position: absolute;
+  left:0px;
+  top: 350px;
+}
+
+.job-card{
+ position: absolute;
+  width: 650px;
+  right: 0;
+
+
+}
+
+
+
+
+.job-advert-post-textarea{
+  flex-wrap: wrap;
+  align-items: center;
+}
